@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:13.3
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=educational_practice
+    restart: always
+
+    ports:
+      - "5433:5432"
+  telegram_bot:
+    build: .
+    depends_on:
+      - db
+    restart: always
+    environment:
+      - BOT_TOKEN=token
+      - USER=postgres
+      - PASSWORD=postgres
+      - DATABASE=educational_practice
+      - PORT=5432
+      - HOST=db
+
+    command: bash -c "python main.py"
